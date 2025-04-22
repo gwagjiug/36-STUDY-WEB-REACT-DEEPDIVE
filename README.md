@@ -44,7 +44,7 @@ AT SOPT 36기 리액트 심화 스터디
 
 ### 파일명 규칙
 
-- 파일명은 **소문자(kebab-case)**를 사용합니다.  
+- 파일명은 `소문자(kebab-case)`를 사용합니다.  
   예시: `react-hooks-summary.md`, `useeffect-examples.md`
 
 ---
