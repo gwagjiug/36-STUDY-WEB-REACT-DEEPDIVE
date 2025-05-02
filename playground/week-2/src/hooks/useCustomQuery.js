@@ -1,34 +1,37 @@
-//여기서 시작
-import React from "react";
-import { useCustomQuery } from "./hooks/useCustomQuery";
+import { useEffect, useState } from "react";
 
-function App() {
-  const { data, isLoading, error } = useCustomQuery(
-    "https://pokeapi.co/api/v2/pokemon/ditto",
-  );
+export function useCustomQuery(prameter) {
+  const [data, setData] = useState(null);
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (isLoading) {
-    return (
-      <div
-        style={{ display: "flex", justifyContent: "center", marginTop: "50px" }}
-      >
-        Loading...
-      </div>
-    );
-  }
+  useEffect(() => {
+    let isMounted = true;
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+    async function fetchData() {
+      setLoading(true);
+      try {
+        const response = await fetch(prameter);
+        if (!response.ok) throw new Error("네트워크 응답 없음");
+        const json = await response.json();
+        if (isMounted) {
+          setData(json);
+          setLoading(false);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(err);
+          setLoading(false);
+        }
+      }
+    }
 
-  return (
-    console.log(data),
-    (
-      <div>
-        <h1>곽지욱</h1>
-      </div>
-    )
-  );
+    fetchData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [url]);
+
+  return { data, isLoading, error };
 }
-
-export default App;
